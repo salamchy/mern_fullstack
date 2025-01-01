@@ -1,11 +1,15 @@
-import { Outlet } from "react-router-dom"
-import Navbar from "../components/Navbar"
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import Banner from "../components/Banner";
+import Categories from "../components/Categories";
 
 const Home = () => {
   return (
     <div>
       <Navbar />
-      <Outlet />
+      <Banner />
+      <Categories />
+      <Footer />
     </div>
   )
 }
