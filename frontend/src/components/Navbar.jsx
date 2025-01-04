@@ -2,8 +2,21 @@ import { Link, NavLink } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { GrCart } from "react-icons/gr";
 import { FaRegUser } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import CartModel from "./CartModel";
 
 const Navbar = () => {
+
+  const products = useSelector((state) => state.cart?.products || []);
+  const totalItems = products.reduce((total, product) => total + product.quantity, 0);
+
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const handleCartToggle = () => {
+    setIsCartOpen(!isCartOpen);
+  }
+
   return (
     <header className="fixed-nav-bar w-nav">
       <nav className="max-w-screen-2xl mx-auto px-4 flex justify-between items-center">
@@ -14,11 +27,11 @@ const Navbar = () => {
         </div>
 
         {/* nav links */}
-        <ul className="nav__links">
-          <li><NavLink to="/">HOME</NavLink></li>
-          <li><NavLink to="/shop">SHOP</NavLink></li>
-          <li><NavLink to="/pages">PAGES</NavLink></li>
-          <li><NavLink to="/contact">CONTACT</NavLink></li>
+        <ul className="nav__links ">
+          <li><NavLink className="hover:text-primary" to="/">HOME</NavLink></li>
+          <li><NavLink className="hover:text-primary" to="/shop">SHOP</NavLink></li>
+          <li><NavLink className="hover:text-primary" to="/pages">PAGES</NavLink></li>
+          <li><NavLink className="hover:text-primary" to="/contact">CONTACT</NavLink></li>
         </ul>
 
         {/* nav icons */}
@@ -32,11 +45,9 @@ const Navbar = () => {
 
           {/* cart icon */}
           <span>
-            <button className="hover:text-primary relative">
-              <Link to="/cart">
-                <GrCart />
-              </Link>
-              <sup className="text-sm absolute -top-3.5 -right-2 px-1.5 text-white rounded-full bg-primary text-center">3</sup>
+            <button onClick={handleCartToggle} className="hover:text-primary relative">
+              <GrCart />
+              <sup className="text-sm absolute -top-3.5 -right-2 px-1.5 text-white rounded-full bg-primary text-center">{totalItems}</sup>
             </button>
           </span>
 
@@ -48,6 +59,10 @@ const Navbar = () => {
         </div>
 
       </nav>
+
+      {
+        isCartOpen && <CartModel products={products} isOpen={isCartOpen} onClose={handleCartToggle} />
+      }
     </header>
   )
 }
