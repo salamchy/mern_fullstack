@@ -4,16 +4,16 @@ import Ratings from "../../components/Ratings";
 
 const ProductDetails = () => {
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   return (
     <>
       <section className="section__container bg-primary-light">
         <h2 className="section__header capitalize">Single Product Page</h2>
         <div className="flex flex-row section__subheader space-x-2 items-center justify-center">
-          <span hover:text-primary><Link to="/">HOME</Link></span>
+          <span className="hover:text-primary"><Link to="/">HOME</Link></span>
           <RiArrowRightSLine className="mt-1/2" />
-          <span hover:text-primary ><Link to="/shop">SHOP</Link></span>
+          <span className="hover:text-primary"><Link to="/shop">SHOP</Link></span>
           <RiArrowRightSLine className="mt-1/2" />
           <span className="hover:text-primary"></span>
         </div>
@@ -33,19 +33,19 @@ const ProductDetails = () => {
             <p className="text-gray-400 mb-4">This is a product description.</p>
 
             {/* additional products */}
-              <div>
-                <p><strong>Category:</strong> accessroies</p>
-                <p><strong>Color:</strong> Yellow</p>
+            <div>
+              <p><strong>Category:</strong> accessroies</p>
+              <p><strong>Color:</strong> Yellow</p>
 
-                <div className="flex flex-row items-center">
-                  <strong>Rating : </strong>
-                  <Ratings rating={"4"} />
-                </div>
+              <div className="flex flex-row items-center">
+                <strong>Rating : </strong>
+                <Ratings rating={"4"} />
               </div>
+            </div>
 
-              <button className="mt-6 px-6 py-3 bg-primary text-white rounded-md">
-                Add to Cart
-              </button>
+            <button className="mt-6 px-6 py-3 bg-primary text-white rounded-md">
+              Add to Cart
+            </button>
           </div>
         </div>
       </section>

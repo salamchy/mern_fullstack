@@ -180,11 +180,12 @@ nav {
   margin-top: 4rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .categories__card {
   text-align: center;
+  gap: 5rem;
 }
 
 .categories__card img {
@@ -249,7 +250,7 @@ nav {
   margin: 4rem auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 11rem;
 }
 
 .product__card__content {
