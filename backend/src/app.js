@@ -7,7 +7,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
     credentials: true,
   })
 );
@@ -24,8 +24,13 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//router import
 import userRouter from "./routes/user.routes.js";
+import productRouter from "./routes/products.routes.js";
+import reviewRouter from "./routes/reviews.routes.js";
+
 //router declaration
 app.use("/api/v1", userRouter);
-
+app.use("/api/v1/products", productRouter);
+app.use("/api/v1/reviews", reviewRouter);
 export { app };
