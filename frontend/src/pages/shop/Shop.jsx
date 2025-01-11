@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import productsData from "../../data/products.json";
+import { useState } from "react";
 import ProductCards from "../../components/ProductCards";
 import ShopFiltering from "../../components/ShopFiltering";
+import { useFetchAllProductsQuery } from "../../redux/features/products/productsApi";
 
 const filters = {
   category: ["all", "accessories", "dress", "jewellery", "cosmetics"],
@@ -15,45 +15,25 @@ const filters = {
 }
 
 const Shop = () => {
-
-  const [products, setProducts] = useState(productsData);
   const [filterState, setFilterState] = useState({
     category: "all",
     color: "all",
     priceRange: ""
   });
 
-  //filtering products function
-  const applyFilter = () => {
-    let filteredProducts = productsData;
+  const [currentPage, setCureentPage] = useState(1);
+  const [ProductsPerPage] = useState(8);
+  const { category, color, priceRange } = filterState;
+  const [minPrice, maxPrice] = priceRange.split("-").map(Number);
 
-    //filter by category
-    if (filterState.category && filterState.category !== "all") {
-      filteredProducts = filteredProducts.filter(product => product.category === filterState.category);
-    }
-
-    //filter by color
-    if (filterState.color && filterState.color !== "all") {
-      filteredProducts = filteredProducts.filter(product => product.color === filterState.color);
-    }
-
-    //filter by price range
-    if (filterState.priceRange) {
-      const [minPrice, maxPrice] = filterState.priceRange.split("-").map(Number);
-      filteredProducts = filteredProducts.filter(product => {
-        if (maxPrice === Infinity) {
-          return product.price >= minPrice;
-        }
-        return product.price >= minPrice && product.price <= maxPrice;
-      });
-    }
-
-    setProducts(filteredProducts);
-  };
-
-  useEffect(() => {
-    applyFilter();
-  }, [filterState]);
+  const { data: { products = [], totalPages, totalProducts } = {}, error, isLoading } = useFetchAllProductsQuery({
+    category: category !== "all" ? category : "",
+    color: color !== "all" ? color : "",
+    minPrice: isNaN(minPrice) ? "" : minPrice,
+    maxPrice: isNaN(maxPrice) ? "" : maxPrice,
+    page: currentPage,
+    limit: ProductsPerPage,
+  })
 
   //clear the filters
   const clearFilter = () => {
@@ -63,6 +43,19 @@ const Shop = () => {
       price: ""
     });
   }
+
+  //handle paginating 
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCureentPage(pageNumber)
+    }
+  }
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error loading products</div>
+
+  const startProduct = (currentPage - 1) * ProductsPerPage + 1;
+  const endProduct = startProduct + products.length - 1;
 
   return (
     <>
@@ -84,8 +77,23 @@ const Shop = () => {
 
           {/* right side */}
           <div>
-            <h3 className="text-xl font-medium mb-4">Products Available: {products.length}</h3>
+            <h3 className="text-xl font-medium mb-4">Showing {startProduct} to {endProduct} of {totalProducts} products.</h3>
             <ProductCards products={products} />
+
+            {/* pagination controls */}
+            <div className="mt-6 flex justify-center">
+              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Previous</button>
+
+              {
+                [...Array(totalPages)].map((_, index) => (
+                  <button onClick={() => handlePageChange(index + 1)} key={index} className={`px-4 py-2 ${currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}
+                    rounded-md mx-1
+                    `}>{index + 1}</button>
+                ))
+              }
+
+              <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md ml-2">Next</button>
+            </div>
           </div>
         </div>
 

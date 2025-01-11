@@ -8,6 +8,8 @@ import Shop from "./pages/shop/Shop";
 import ProductDetails from "./pages/productDetails/ProductDetails";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
+import About from "./pages/about/About";
+import Contact from "./pages/contact/Contact";
 
 const App = () => {
 
@@ -35,7 +37,15 @@ const App = () => {
         {
           path: "/shop/:id",
           element: <ProductDetails />
-        }
+        },
+        {
+          path: "/about",
+          element: <About />
+        },
+        {
+          path: "/contact",
+          element: <Contact />
+        },
       ]
     },
     {
@@ -46,6 +56,7 @@ const App = () => {
       path: "/register",
       element: <Register />
     }
+
   ]);
 
   return <RouterProvider router={router} />
